@@ -10,6 +10,7 @@ public class ScrollWheel : MonoBehaviour
     private Collider2D _coll;
     private Collider2D _groundColl;
     [SerializeField][Range(0,120)] private float WindRoteSpeed = 12f;
+    [SerializeField] private float PlayerForce = 10f;
     private Control control;
     public Rigidbody2D Player;
     [SerializeField]Vector2 MouseDir;
@@ -104,7 +105,7 @@ public class ScrollWheel : MonoBehaviour
                 // 给Player添加力，使其沿着X轴方向飞行
                 //_corBlow =  StartCoroutine(CorBlow(forceDirection));
                 Debug.Log("1");
-                Player.AddForce(forceDirection * WindRoteSpeed, ForceMode2D.Force);
+                Player.AddForce(forceDirection * PlayerForce, ForceMode2D.Force);
                 var veloX= Mathf.Clamp(Player.velocity.x, -_maxVelo, _maxVelo);
                 var veloY= Mathf.Clamp(Player.velocity.y, -_maxVelo, _maxVelo);
                 Player.velocity = new Vector2(veloX, veloY);
