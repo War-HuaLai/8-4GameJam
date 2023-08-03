@@ -134,9 +134,9 @@ GameObject:
   - component: {fileID: 341416379}
   - component: {fileID: 341416378}
   - component: {fileID: 341416380}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,8 +201,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 341416377}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.89, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 1}
+  m_LocalPosition: {x: 4.7986, y: -5.4718, z: 0}
+  m_LocalScale: {x: 122.07554, y: 2.1635494, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -359,7 +359,7 @@ GameObject:
   - component: {fileID: 1071234107}
   m_Layer: 0
   m_Name: Dynamic Sprite
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -376,11 +376,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 3
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 2d72f13a37c66774bac656f0bac45dd2, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -390,7 +390,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &1071234108
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -523,7 +523,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93623d82de59df64dabbae10c0a6a142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
+  WindRoteSpeed: 80
+  Player: {fileID: 1071234107}
+  MouseDir: {x: 0, y: 0}
+  _blowCD: 2
+  _blowTimer: 0
+  _canBlow: 1
+  _groundedCD: 0.4
+  _maxVelo: 10
+  _onGroundedDetect: 0
 --- !u!212 &1886816190
 SpriteRenderer:
   m_ObjectHideFlags: 0
