@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 public class CameraMove : MonoBehaviour
@@ -11,6 +12,10 @@ public class CameraMove : MonoBehaviour
 
     private bool isMove=false;
 
+    private Vector3 movement;
+    float timecount = 0f;
+
+
     private void Update()
     {
         if (player.position.y > transform.position.y + deltaDis)
@@ -18,8 +23,8 @@ public class CameraMove : MonoBehaviour
             if (!isMove)
             {
                 isMove = true;
-                Vector3 movement = new Vector3(0, 2*deltaDis, 0);
-                StartCoroutine(TimeCount(movement));
+                movement = new Vector3(0, 2*deltaDis, 0);
+                //StartCoroutine(TimeCount(movement));
             }
 
         }
@@ -28,13 +33,29 @@ public class CameraMove : MonoBehaviour
             if (!isMove)
             {
                 isMove = true;
-                Vector3 movement = new Vector3(0, -2*deltaDis, 0);
-                StartCoroutine(TimeCount(movement));
+                movement = new Vector3(0, -2*deltaDis, 0);
+                //;StartCoroutine(TimeCount(movement));
             }
 
             //transform.position -= new Vector3(0, deltaDis, 0);
         }
+        if(isMove) {
+            if (timecount < cameraTransTime)
+            {
+                transform.position += Vector3.Lerp(Vector3.zero, movement, Time.deltaTime / cameraTransTime);
+                timecount += Time.deltaTime;
+            }
+            else
+            {
+                isMove = false;
+                timecount = 0f;
+
+            }
+
+        }
     }
+
+
     IEnumerator TimeCount(Vector3 moveMent)
     {
         float timecount = 0f;
