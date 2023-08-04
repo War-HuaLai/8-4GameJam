@@ -118,6 +118,7 @@ public class ScrollWheel : MonoBehaviour
                 {
                     _canBlow = false;
                 }
+                AudioManger.Instance.PlaySFX("");
             }
         }
     }
