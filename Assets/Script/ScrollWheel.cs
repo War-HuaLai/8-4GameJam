@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class ScrollWheel : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class ScrollWheel : MonoBehaviour
     [SerializeField] bool _onGroundedDetect;
     [SerializeField] private ParticleSystem _wind;
 
+    [SerializeField] private UnityEngine.UI.Image _arrow;
+
     private void Awake()
     {
         control = new Control();
@@ -36,7 +39,17 @@ public class ScrollWheel : MonoBehaviour
         control.Player.Force.performed += PushForce;
         control.Player.Force.canceled += PushForce;
     }
-    
+
+    public void InputStop()
+    {
+        control.Disable();
+    }
+
+    public void InputStart()
+    {
+        control.Enable();
+    }
+
     void Update()
     {
         WindingDir();
@@ -46,6 +59,8 @@ public class ScrollWheel : MonoBehaviour
     private void FixedUpdate()
     {
         ForcePlayer();
+        SetArrow();
+
     }
 
     private void DetectGrounded()
@@ -58,6 +73,11 @@ public class ScrollWheel : MonoBehaviour
                 StartCoroutine(CorGrounded());
             }
         }
+    }
+
+    private void SetArrow()
+    {
+        _arrow.fillAmount = 1 - _blowTimer / _blowCD;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -83,6 +103,15 @@ public class ScrollWheel : MonoBehaviour
     {
         isPressed=context.ReadValueAsButton();
         Debug.Log(context.ReadValueAsButton());
+        if (isPressed && _canBlow)
+        {
+            AudioManger.Instance.PlayMusic("wind");
+            //if (_coll.IsTouching(_groundColl))
+            AudioManger.Instance.PlaySFX("jump");
+        }
+        else if (!isPressed)
+            AudioManger.Instance.StopMusic();
+
     }
 
     void WindingDir()//风向旋转速度
@@ -107,7 +136,7 @@ public class ScrollWheel : MonoBehaviour
                 _wind.Play();
                 // 给Player添加力，使其沿着X轴方向飞行
                 //_corBlow =  StartCoroutine(CorBlow(forceDirection));
-                Debug.Log("1");
+                //Debug.Log("1");
 
                 Player.AddForce(forceDirection * PlayerForce, ForceMode2D.Force);
                 var veloX= Mathf.Clamp(Player.velocity.x, -_maxVelo, _maxVelo);
@@ -117,8 +146,8 @@ public class ScrollWheel : MonoBehaviour
                 if (_blowTimer >= _blowCD)
                 {
                     _canBlow = false;
+                    AudioManger.Instance.StopMusic();
                 }
-                AudioManger.Instance.PlaySFX("");
             }
         }
     }
@@ -132,6 +161,7 @@ public class ScrollWheel : MonoBehaviour
         _blowTimer = 0f;
         _canBlow = true;
         _onGroundedDetect = false;
+        _arrow.fillAmount = 1;
     }
 
     #region

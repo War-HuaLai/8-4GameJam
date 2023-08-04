@@ -10,7 +10,6 @@ public class AudioManger : MonoBehaviour
     public Sound[] musicSounds, sfxSounds;
     public AudioSource musicSource, sfxSource;
 
-
     public void MusicVolume(float volume)//调节音量
     {
         musicSource.volume = volume;
@@ -30,9 +29,22 @@ public class AudioManger : MonoBehaviour
         }
         else
         {
-            musicSource.clip = s.clip;
+            if (!musicSource.isPlaying)
+            {
+                musicSource.clip = s.Get();
+                musicSource.Play();
+                return;
+            }
+            if (musicSource.clip == s.Get())
+                return;
+            musicSource.clip = s.Get();
             musicSource.Play();
         }
+    }
+
+    public void StopMusic()
+    {
+        musicSource.Stop();
     }
 
 
@@ -46,7 +58,14 @@ public class AudioManger : MonoBehaviour
         }
         else
         {
-            sfxSource.PlayOneShot(s.clip);
+            if (!sfxSource.isPlaying)
+            {
+                sfxSource.PlayOneShot(s.Get());
+                return;
+            }
+            if (sfxSource.clip == s.Get())
+                return;
+            sfxSource.PlayOneShot(s.Get());
             /*当需要在同一个时间播放N中AudioClip时，有两种方法PlayClipAtPoint()和PlayOneShot()
                 1.共同点
                 两个方法都是播放完AudioClip后自动关闭自动销毁
@@ -89,11 +108,12 @@ public class AudioManger : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Instance = this;
         }
     }
     private void Start()
     {
-        PlayMusic("");
+        //PlayMusic("");
     }
 }

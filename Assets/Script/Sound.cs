@@ -7,5 +7,13 @@ using UnityEngine;
 public class Sound
 {
     public string name;
-    public AudioClip clip;
+    public AudioClip[] clip;
+
+    public AudioClip Get()
+    {
+        if (clip.Length == 0)
+            return null;
+        return clip[Random.Range(0, clip.Length)];
+
+    }
 }

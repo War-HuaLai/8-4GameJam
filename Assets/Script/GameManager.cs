@@ -13,14 +13,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _textTimer;
     int timer;
     public int finalScore ;
-    private List<int> scores = new List<int>();
+    static private List<int> scores = new List<int>();
 
     private void AddScore(int newScore)
     {
         scores.Add(newScore);
-        UpdateLeaderboard();
+        //UpdateLeaderboard();
     }
-    void UpdateLeaderboard()
+    public void UpdateLeaderboard()
     {
         scores.Sort((a, b) => b.CompareTo(a));
 
@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
         }
 
         _textTimer.text = leaderboardText;
+        _textTimer.color = Color.black;
+        _textTimer.rectTransform.localPosition = new Vector3(0,_textTimer.rectTransform.position.y,0);
+        _textTimer.gameObject.SetActive(true);
     }
 
     private void Awake() {
@@ -40,7 +43,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }else
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Instance = this;
         }
     }
 
@@ -49,9 +53,17 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-         finalScore = timer;
+        finalScore = timer;
+        
         AddScore(finalScore);
+        
     }
+
+    public void CloseTimeUI()
+    {
+        _textTimer.gameObject.SetActive(false);
+    }
+
     IEnumerator Timer()
     {
         while (true)
