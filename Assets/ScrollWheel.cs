@@ -21,7 +21,8 @@ public class ScrollWheel : MonoBehaviour
     [SerializeField,Tooltip("碰到地面重置的时间")] private float _groundedCD;
     [SerializeField] private float _maxVelo;
     [SerializeField] bool _onGroundedDetect;
-    Coroutine _corBlow;
+    [SerializeField] private ParticleSystem _wind;
+
     private void Awake()
     {
         control = new Control();
@@ -102,9 +103,12 @@ public class ScrollWheel : MonoBehaviour
 
             if (_canBlow)
             {
+                _wind.transform.rotation = Quaternion.LookRotation(transform.right);
+                _wind.Play();
                 // 给Player添加力，使其沿着X轴方向飞行
                 //_corBlow =  StartCoroutine(CorBlow(forceDirection));
                 Debug.Log("1");
+
                 Player.AddForce(forceDirection * PlayerForce, ForceMode2D.Force);
                 var veloX= Mathf.Clamp(Player.velocity.x, -_maxVelo, _maxVelo);
                 var veloY= Mathf.Clamp(Player.velocity.y, -_maxVelo, _maxVelo);
@@ -119,12 +123,6 @@ public class ScrollWheel : MonoBehaviour
     }
 
 
-    //IEnumerator CorBlow(Vector2 dir)
-    //{
-    //    Player.AddForce(dir * 10f, ForceMode2D.Force);
-    //    yield return new WaitForSeconds(_blowCD);
-    //    _canBlow = false;
-    //}
 
     IEnumerator CorGrounded()
     {
