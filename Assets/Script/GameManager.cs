@@ -12,6 +12,28 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _textTimer;
     int timer;
+    public int finalScore ;
+    private List<int> scores = new List<int>();
+
+    private void AddScore(int newScore)
+    {
+        scores.Add(newScore);
+        UpdateLeaderboard();
+    }
+    void UpdateLeaderboard()
+    {
+        scores.Sort((a, b) => b.CompareTo(a));
+
+        string leaderboardText = "Leaderboard:\n";
+        int count = Mathf.Min(scores.Count, 10); 
+
+        for (int i = 0; i < count; i++)
+        {
+            leaderboardText += $"{i + 1}. {scores[i]}\n";
+        }
+
+        _textTimer.text = leaderboardText;
+    }
 
     private void Awake() {
         if(!Instance){
@@ -25,8 +47,12 @@ public class GameManager : MonoBehaviour
     private void Start() {
        StartCoroutine(Timer());
     }
-
-   IEnumerator Timer()
+    public void GameOver()
+    {
+         finalScore = timer;
+        AddScore(finalScore);
+    }
+    IEnumerator Timer()
     {
         while (true)
         {
